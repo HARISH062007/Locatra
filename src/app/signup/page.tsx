@@ -1,0 +1,167 @@
+"use client";
+
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui";
+
+export default function SignUpPage() {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      // Step 1: Create the account
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Signup failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Automatically sign in
+      const signInResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        setError("Account created! Please sign in.");
+        router.push("/login");
+      } else {
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-background)] px-4 py-16">
+      <div className="glass-lens w-full max-w-md p-8">
+        {/* Logo */}
+        <div className="mb-8 flex flex-col items-center gap-2">
+          <svg width="44" height="44" viewBox="0 0 100 100" fill="none" aria-hidden>
+            <rect width="100" height="100" rx="16" fill="url(#suLogoGrad)" />
+            <path d="M30 70 L50 30 L70 70" stroke="white" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="50" cy="52" r="7" fill="#06B6D4" />
+            <defs>
+              <linearGradient id="suLogoGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#8B5CF6" /><stop offset="1" stopColor="#06B6D4" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1 className="font-heading text-2xl font-bold text-[var(--color-on-surface)]">Create your account</h1>
+          <p className="text-sm text-[var(--color-on-surface-variant)]">Start scanning, for free.</p>
+        </div>
+
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-[var(--color-on-surface-variant)]">
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              placeholder="Ananya Sharma"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-12 w-full rounded-xl border border-[var(--color-border-glass)] bg-[var(--color-surface-glass)] px-4 text-[var(--color-on-surface)] placeholder:text-[var(--color-on-surface-variant)] focus:border-[var(--color-accent-cyan)] focus:outline-none focus:shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-[var(--color-on-surface-variant)]">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-12 w-full rounded-xl border border-[var(--color-border-glass)] bg-[var(--color-surface-glass)] px-4 text-[var(--color-on-surface)] placeholder:text-[var(--color-on-surface-variant)] focus:border-[var(--color-accent-cyan)] focus:outline-none focus:shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-[var(--color-on-surface-variant)]">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="new-password"
+              placeholder="Min. 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-12 w-full rounded-xl border border-[var(--color-border-glass)] bg-[var(--color-surface-glass)] px-4 text-[var(--color-on-surface)] placeholder:text-[var(--color-on-surface-variant)] focus:border-[var(--color-accent-cyan)] focus:outline-none focus:shadow-[0_0_12px_rgba(6,182,212,0.3)] transition-all"
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              {error}
+            </div>
+          )}
+
+          <Button type="submit" variant="primary" className="mt-2 w-full" disabled={loading}>
+            {loading ? "Creating account…" : "Create Account"}
+          </Button>
+        </form>
+
+        <div className="my-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-[var(--color-border-glass)]" />
+          <span className="text-xs text-[var(--color-on-surface-variant)]">or continue with</span>
+          <div className="h-px flex-1 bg-[var(--color-border-glass)]" />
+        </div>
+
+        {/* OAuth */}
+        <div className="flex flex-col gap-3">
+          <Button
+            variant="ghost"
+            className="w-full gap-3"
+            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 11.745V8.28h11.5c.133.657.2 1.322.2 2.003 0 6.063-4.07 10.374-11.7 10.374-6.71 0-12-5.39-12-12S5.29 .657 12 .657c3.236 0 5.948 1.19 8.037 3.14L17.7 6.072C16.167 4.636 14.2 3.797 12 3.797c-4.63 0-8.39 3.808-8.39 8.531s3.76 8.531 8.39 8.531c4.23 0 7.154-2.4 7.706-5.713H12V11.745z" />
+            </svg>
+            Sign up with Google
+          </Button>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-[var(--color-on-surface-variant)]">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[var(--color-accent-cyan)] hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
