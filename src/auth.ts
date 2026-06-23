@@ -1,9 +1,8 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { SignJWT, jwtVerify } from "jose";
-import { createHash, randomBytes } from "crypto";
+import { createHash } from "crypto";
 
 function hashPassword(password: string, salt: string): string {
   return createHash("sha256").update(salt + password).digest("hex");
@@ -20,7 +19,8 @@ function verifyPassword(stored: string, input: string): boolean {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  // NOTE: No adapter — PrismaAdapter conflicts with Credentials provider + JWT strategy.
+  // DB lookups are done manually in authorize() below.
   session: { strategy: "jwt" },
   providers: [
     Credentials({

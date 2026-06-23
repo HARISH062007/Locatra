@@ -1,11 +1,15 @@
 import { Sidebar } from "@/components/Sidebar";
 import { BackgroundShader } from "@/components/BackgroundShader";
+import { auth } from "@/auth";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  const userName = session?.user?.name || "Guest";
+
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-on-surface)]">
       <BackgroundShader />
@@ -24,7 +28,7 @@ export default function DashboardLayout({
             {/* Profile / Notification placeholder */}
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-[var(--color-accent-purple)] to-[var(--color-accent-cyan)]" />
-              <span className="hidden text-sm font-medium sm:inline-block">Demo User</span>
+              <span className="hidden text-sm font-medium sm:inline-block">{userName}</span>
             </div>
           </div>
         </header>

@@ -40,7 +40,7 @@ class JobType(str, enum.Enum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     name = Column(String, nullable=True)
     email = Column(String, unique=True, nullable=False)
     emailVerified = Column(DateTime(timezone=True), nullable=True)
@@ -64,7 +64,7 @@ class User(Base):
 class Account(Base):
     __tablename__ = "accounts"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     type = Column(String, nullable=False)
     provider = Column(String, nullable=False)
@@ -85,7 +85,7 @@ class Account(Base):
 class Session(Base):
     __tablename__ = "sessions"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     sessionToken = Column(String, unique=True, nullable=False)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     expires = Column(DateTime(timezone=True), nullable=False)
@@ -98,16 +98,16 @@ class Session(Base):
 class VerificationToken(Base):
     __tablename__ = "verification_tokens"
 
-    identifier = Column(String, primaryKey=True)
-    token = Column(String, unique=True, primaryKey=True)
+    identifier = Column(String, primary_key=True)
+    token = Column(String, unique=True, primary_key=True)
     expires = Column(DateTime(timezone=True), nullable=False)
 
 
 class Authenticator(Base):
     __tablename__ = "authenticators"
 
-    credentialID = Column(String, primaryKey=True, unique=True)
-    userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), primaryKey=True)
+    credentialID = Column(String, primary_key=True, unique=True)
+    userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     providerAccountId = Column(String, nullable=False)
     credentialPublicKey = Column(String, nullable=False)
     counter = Column(Integer, nullable=False)
@@ -121,7 +121,7 @@ class Authenticator(Base):
 class Project(Base):
     __tablename__ = "projects"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -133,7 +133,7 @@ class Project(Base):
 class Room(Base):
     __tablename__ = "rooms"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     projectId = Column(String, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     lengthCm = Column(Numeric(10, 2), nullable=False)
@@ -152,7 +152,7 @@ class Room(Base):
 class RoomSpace(Base):
     __tablename__ = "room_spaces"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     roomId = Column(String, ForeignKey("rooms.id", ondelete="CASCADE"), nullable=False)
     label = Column(String, nullable=False)
     widthCm = Column(Numeric(10, 2), nullable=False)
@@ -166,7 +166,7 @@ class RoomSpace(Base):
 class Object(Base):
     __tablename__ = "objects"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     name = Column(String, nullable=False)
     category = Column(String, nullable=False)
@@ -186,7 +186,7 @@ class Object(Base):
 class Scan(Base):
     __tablename__ = "scans"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     targetType = Column(Enum(TargetType), nullable=False)
     targetId = Column(String, nullable=True)
@@ -201,7 +201,7 @@ class Scan(Base):
 class AIJob(Base):
     __tablename__ = "ai_jobs"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     scanId = Column(String, ForeignKey("scans.id", ondelete="CASCADE"), nullable=False)
     jobType = Column(Enum(JobType), nullable=False)
     status = Column(Enum(ScanStatus), default=ScanStatus.QUEUED, nullable=False)
@@ -216,7 +216,7 @@ class AIJob(Base):
 class Recommendation(Base):
     __tablename__ = "recommendations"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     objectId = Column(String, ForeignKey("objects.id", ondelete="CASCADE"), nullable=False)
     roomId = Column(String, ForeignKey("rooms.id", ondelete="CASCADE"), nullable=False)
     recommendedSpaceId = Column(String, ForeignKey("room_spaces.id", ondelete="CASCADE"), nullable=False)
@@ -234,7 +234,7 @@ class Recommendation(Base):
 class Placement(Base):
     __tablename__ = "placements"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     recommendationId = Column(String, ForeignKey("recommendations.id", ondelete="SET NULL"), nullable=True)
     objectId = Column(String, ForeignKey("objects.id", ondelete="CASCADE"), nullable=False)
     roomId = Column(String, ForeignKey("rooms.id", ondelete="CASCADE"), nullable=False)
@@ -249,7 +249,7 @@ class Placement(Base):
 class Preference(Base):
     __tablename__ = "preferences"
 
-    id = Column(String, primaryKey=True)
+    id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     key = Column(String, nullable=False)
     valueJson = Column(JSON, nullable=False)
