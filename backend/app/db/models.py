@@ -46,10 +46,10 @@ class User(Base):
     emailVerified = Column(DateTime(timezone=True), nullable=True)
     image = Column(String, nullable=True)
     passwordHash = Column(String, nullable=True)
-    role = Column(Enum(Role), default=Role.HOMEOWNER, nullable=False)
-    unitPreference = Column(Enum(UnitPreference), default=UnitPreference.METRIC, nullable=False)
+    role = Column(Enum(Role, name="Role", native_enum=True, create_type=False), default=Role.HOMEOWNER, nullable=False)
+    unitPreference = Column(Enum(UnitPreference, name="UnitPreference", native_enum=True, create_type=False), default=UnitPreference.METRIC, nullable=False)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updatedAt = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updatedAt = Column(DateTime(timezone=True), default=func.now(), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Relationships
     accounts = relationship("Account", back_populates="user", cascade="all, delete-orphan")
@@ -77,7 +77,7 @@ class Account(Base):
     id_token = Column(String, nullable=True)
     session_state = Column(String, nullable=True)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updatedAt = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updatedAt = Column(DateTime(timezone=True), default=func.now(), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     user = relationship("User", back_populates="accounts")
 
@@ -90,7 +90,7 @@ class Session(Base):
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     expires = Column(DateTime(timezone=True), nullable=False)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updatedAt = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updatedAt = Column(DateTime(timezone=True), default=func.now(), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     user = relationship("User", back_populates="sessions")
 
@@ -141,7 +141,7 @@ class Room(Base):
     heightCm = Column(Numeric(10, 2), nullable=False)
     meshUrl = Column(String, nullable=False)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updatedAt = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updatedAt = Column(DateTime(timezone=True), default=func.now(), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     project = relationship("Project", back_populates="rooms")
     spaces = relationship("RoomSpace", back_populates="room", cascade="all, delete-orphan")
@@ -188,10 +188,10 @@ class Scan(Base):
 
     id = Column(String, primary_key=True)
     userId = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    targetType = Column(Enum(TargetType), nullable=False)
+    targetType = Column(Enum(TargetType, name="TargetType", native_enum=True, create_type=False), nullable=False)
     targetId = Column(String, nullable=True)
     rawMediaUrl = Column(String, nullable=False)
-    status = Column(Enum(ScanStatus), default=ScanStatus.QUEUED, nullable=False)
+    status = Column(Enum(ScanStatus, name="ScanStatus", native_enum=True, create_type=False), default=ScanStatus.QUEUED, nullable=False)
     createdAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     user = relationship("User", back_populates="scans")
@@ -203,8 +203,8 @@ class AIJob(Base):
 
     id = Column(String, primary_key=True)
     scanId = Column(String, ForeignKey("scans.id", ondelete="CASCADE"), nullable=False)
-    jobType = Column(Enum(JobType), nullable=False)
-    status = Column(Enum(ScanStatus), default=ScanStatus.QUEUED, nullable=False)
+    jobType = Column(Enum(JobType, name="JobType", native_enum=True, create_type=False), nullable=False)
+    status = Column(Enum(ScanStatus, name="ScanStatus", native_enum=True, create_type=False), default=ScanStatus.QUEUED, nullable=False)
     progressPct = Column(Integer, default=0, nullable=False)
     errorMessage = Column(String, nullable=True)
     startedAt = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -254,6 +254,6 @@ class Preference(Base):
     key = Column(String, nullable=False)
     valueJson = Column(JSON, nullable=False)
     learnedFrom = Column(String, nullable=False)
-    updatedAt = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    updatedAt = Column(DateTime(timezone=True), default=func.now(), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     user = relationship("User", back_populates="preferences")

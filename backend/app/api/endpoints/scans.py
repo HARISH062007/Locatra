@@ -59,7 +59,8 @@ async def simulate_3d_reconstruction(scan_id: str, db_session: AsyncSession):
                     lengthCm=520,
                     widthCm=480,
                     heightCm=270,
-                    meshUrl="living_room.glb"
+                    meshUrl="living_room.glb",
+                    updatedAt=datetime.utcnow()
                 )
                 db_session.add(room)
                 await db_session.commit()

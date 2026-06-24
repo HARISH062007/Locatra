@@ -23,14 +23,16 @@ export function Navbar() {
 
   return (
     <header
-      className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300",
-        scrolled
-          ? "glass border-b border-[var(--color-border-glass)] shadow-lg"
-          : "bg-transparent",
-      )}
+      className="fixed top-0 left-0 z-50 w-full transition-all duration-300 border-b border-[var(--color-border-glass)]"
+      style={{
+        background: scrolled
+          ? "rgba(10, 14, 26, 0.85)"
+          : "rgba(10, 14, 26, 0.55)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
     >
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+      <nav className="w-full flex h-20 max-w-7xl items-center justify-between px-6" style={{ marginLeft: "auto", marginRight: "auto" }}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3" aria-label="Locatra Home">
           {/* Inline SVG logo matching Stitch design */}

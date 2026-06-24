@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button, Badge, Card, SectionHeading, StatCard, StepIndicator } from "@/components/ui";
 import { Navbar } from "@/components/Navbar";
 import { BackgroundShader } from "@/components/BackgroundShader";
+import { cn } from "@/lib/utils";
 
 /* ── Feature data ─────────────────────────────────────────────────────── */
 const FEATURES = [
@@ -134,22 +135,22 @@ export default function LandingPage() {
       <BackgroundShader />
       <Navbar />
 
-      <main className="relative z-10">
+      <main className="relative z-10 w-full">
 
         {/* ── HERO ────────────────────────────────────────────────────── */}
-        <section className="flex min-h-screen flex-col items-center justify-center gap-12 px-6 pt-32 pb-24 text-center lg:flex-row lg:text-left lg:gap-20 lg:px-24">
-          <div className="flex max-w-2xl flex-col gap-6">
-            <Badge label="Spatial Intelligence" variant="purple" />
+        <section className="w-full flex flex-col items-center justify-center gap-12 px-6 pt-36 pb-20 text-center max-w-5xl" style={{ marginLeft: "auto", marginRight: "auto" }}>
+          <div className="flex flex-col items-center gap-6 max-w-3xl">
+            <Badge label="Spatial Intelligence" variant="purple" className="self-center" />
             <h1 className="font-heading text-5xl font-bold leading-[1.1] tracking-tight text-[var(--color-on-surface)] sm:text-6xl lg:text-7xl">
               Your space,{" "}
               <span className="gradient-text">understood</span>
               {" "}by AI.
             </h1>
-            <p className="text-lg text-[var(--color-on-surface-variant)] lg:text-xl">
+            <p className="text-lg text-[var(--color-on-surface-variant)] lg:text-xl max-w-2xl">
               Scan an object, scan your room, and let Locatra's spatial reasoning engine
               find the perfect placement — then preview it in AR before lifting a finger.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/signup">
                 <Button variant="primary" size="lg">Start Scanning Free</Button>
               </Link>
@@ -158,7 +159,7 @@ export default function LandingPage() {
               </Link>
             </div>
             {/* Social proof stats */}
-            <div className="mt-4 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 w-full max-w-2xl">
               <StatCard value="&lt;30s" label="Object scan time" accent="cyan" />
               <StatCard value="91%"    label="Placement accuracy" accent="purple" />
               <StatCard value="0 Apps" label="Install required" accent="cyan" />
@@ -170,14 +171,14 @@ export default function LandingPage() {
 
         {/* ── FEATURES ────────────────────────────────────────────────── */}
         <section id="features" className="px-6 py-24 lg:px-24">
-          <div className="mx-auto max-w-7xl">
+          <div className="w-full max-w-7xl" style={{ marginLeft: "auto", marginRight: "auto" }}>
             <SectionHeading
               badge="Core Capabilities"
               title={<>Everything you need to <span className="gradient-text">place it right</span></>}
               subtitle="A complete spatial intelligence platform — from object capture to AR confirmation."
               center
             />
-            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {FEATURES.map((f, i) => (
                 <Card key={i} hover glow={f.accent} className="flex flex-col gap-4">
                   <div
@@ -203,64 +204,63 @@ export default function LandingPage() {
 
         {/* ── HOW IT WORKS ────────────────────────────────────────────── */}
         <section id="how-it-works" className="px-6 py-24 lg:px-24">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-              <div className="flex flex-col gap-8">
-                <SectionHeading
-                  badge="The Flow"
-                  title={<>From scan to <span className="gradient-text">confirmed</span> in minutes</>}
-                  subtitle="Five steps. No installation. No tape measure."
-                />
-                <div className="flex flex-col gap-3">
-                  {STEPS.map((s, i) => (
-                    <StepIndicator
-                      key={i}
-                      step={i + 1}
-                      label={s.label}
-                      description={s.desc}
-                      active={i === 2}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Pipeline visual */}
-              <div className="relative flex flex-col items-center gap-3">
-                {STEPS.map((s, i) => (
-                  <div key={i} className="flex w-full items-center gap-4">
-                    <div
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                        i < 3
-                          ? "bg-gradient-to-br from-[var(--color-accent-purple)] to-[var(--color-accent-cyan)] text-white"
-                          : "border border-[var(--color-border-glass)] text-[var(--color-on-surface-variant)]"
-                      }`}
-                    >
-                      {i < 3 ? "✓" : i + 1}
-                    </div>
-                    <div
-                      className={`h-12 flex-1 rounded-xl px-4 flex items-center text-sm ${
-                        i === 2 ? "glass border-[var(--color-accent-cyan)]/40 text-[var(--color-accent-cyan)]" : "text-[var(--color-on-surface-variant)]"
-                      }`}
-                    >
-                      {s.label}
-                    </div>
+          <div className="w-full max-w-7xl flex flex-col items-center" style={{ marginLeft: "auto", marginRight: "auto" }}>
+            <SectionHeading
+              badge="The Flow"
+              title={<>From scan to <span className="gradient-text">confirmed</span> in minutes</>}
+              subtitle="Five steps. No installation. No tape measure."
+              center
+            />
+            
+            {/* Centered timeline flow */}
+            <div className="mt-16 w-full flex flex-col items-center gap-10">
+              {STEPS.map((s, i) => (
+                <div key={i} className="relative flex flex-col items-center text-center w-full max-w-xl">
+                  {/* Step number badge */}
+                  <div
+                    className={cn(
+                      "z-20 relative flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold shadow-lg transition-all duration-300 hover:scale-110",
+                      i === 2
+                        ? "bg-gradient-to-br from-[var(--color-accent-purple)] to-[var(--color-accent-cyan)] text-white ring-4 ring-[var(--color-accent-cyan)]/25"
+                        : "bg-[#121829] border border-[var(--color-border-glass)] text-[var(--color-on-surface-variant)]"
+                    )}
+                  >
+                    {i + 1}
                   </div>
-                ))}
-              </div>
+                  
+                  {/* Step info card */}
+                  <div className={cn(
+                    "mt-2 mb-20 w-full bg-[#121829] rounded-2xl p-8 border transition-all duration-300 z-10 relative",
+                    i === 2 ? "border-[var(--color-accent-cyan)]/40 shadow-[0_0_20px_rgba(6,182,212,0.1)]" : "border-[var(--color-border-glass)]"
+                  )}>
+                    <h4 className={cn("font-heading text-lg font-semibold", i === 2 ? "text-[var(--color-accent-cyan)]" : "text-[var(--color-on-surface)]")}>
+                      {s.label}
+                    </h4>
+                    <p className="mt-2 text-sm text-[var(--color-on-surface-variant)] leading-relaxed">
+                      {s.desc}
+                    </p>
+                  </div>
+
+                  {/* Connector line behind the elements */}
+                  {i < STEPS.length - 1 && (
+                    <div className="absolute top-10 bottom-[-120px] w-0.5 bg-gradient-to-b from-[var(--color-accent-cyan)]/30 to-[var(--color-border-glass)] z-0" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* ── PRICING ─────────────────────────────────────────────────── */}
-        <section id="pricing" className="px-6 py-24 lg:px-24">
-          <div className="mx-auto max-w-5xl">
+        <section id="pricing" className="px-6 py-24 lg:px-24 mb-28">
+          <div className="w-full max-w-6xl" style={{ marginLeft: "auto", marginRight: "auto" }}>
             <SectionHeading
               badge="Pricing"
               title={<>Start free, <span className="gradient-text">scale with your space</span></>}
               subtitle="No credit card required to get started."
               center
             />
-            <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            <div className="mt-16 grid gap-10 grid-cols-1 lg:grid-cols-3 max-w-6xl" style={{ marginLeft: "auto", marginRight: "auto" }}>
               {[
                 {
                   name: "Starter",
@@ -296,11 +296,11 @@ export default function LandingPage() {
                   }`}
                 >
                   {plan.accent && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2">
                       <Badge label="Most Popular" variant="purple" />
                     </div>
                   )}
-                  <div>
+                  <div className="flex flex-col items-center text-center">
                     <h3 className="font-heading text-lg font-semibold text-[var(--color-on-surface)]">{plan.name}</h3>
                     <div className="mt-2 flex items-baseline gap-1">
                       <span className="font-heading text-4xl font-bold text-[var(--color-on-surface)]">{plan.price}</span>
@@ -327,10 +327,10 @@ export default function LandingPage() {
         </section>
 
         {/* ── CTA STRIP ───────────────────────────────────────────────── */}
-        <section className="px-6 py-20 lg:px-24">
-          <div className="mx-auto max-w-3xl glass-lens px-8 py-16 text-center">
-            <Badge label="Ready?" variant="cyan" />
-            <h2 className="mt-6 font-heading text-4xl font-bold text-[var(--color-on-surface)]">
+        <section className="px-6 py-20 lg:px-24 mt-28">
+          <div className="glass-lens px-8 py-16 flex flex-col items-center justify-center text-center max-w-3xl" style={{ marginLeft: "auto", marginRight: "auto" }}>
+            <Badge label="Ready?" variant="cyan" className="self-center mb-2" />
+            <h2 className="mt-4 font-heading text-4xl font-bold text-[var(--color-on-surface)]">
               Place it <span className="gradient-text">right</span>, the first time.
             </h2>
             <p className="mt-4 text-[var(--color-on-surface-variant)]">
@@ -348,7 +348,7 @@ export default function LandingPage() {
 
       {/* ── FOOTER ────────────────────────────────────────────────────── */}
       <footer className="border-t border-[var(--color-border-glass)] px-6 py-12 lg:px-24">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row">
+        <div className="w-full mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="font-heading text-lg font-bold text-[var(--color-on-surface)]">Locatra</div>
           <p className="text-sm text-[var(--color-on-surface-variant)]">
             © {new Date().getFullYear()} Locatra. All rights reserved.

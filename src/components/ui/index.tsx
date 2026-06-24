@@ -30,7 +30,7 @@ export function Button({
   const sizes = {
     sm: "h-9 px-4 text-sm",
     md: "h-11 px-6 text-sm",
-    lg: "h-13 px-8 text-base",
+    lg: "h-12 px-8 text-base",
   };
 
   return (
@@ -122,7 +122,7 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div className={cn("flex flex-col gap-4", center && "items-center text-center")}>
-      {badge && <Badge label={badge} variant="purple" />}
+      {badge && <Badge label={badge} variant="purple" className="mb-2" />}
       <h2 className="font-heading text-4xl font-bold leading-tight text-[var(--color-on-surface)] lg:text-5xl">
         {title}
       </h2>

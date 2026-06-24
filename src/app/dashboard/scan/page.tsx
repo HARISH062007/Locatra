@@ -30,9 +30,6 @@ export default function ScanPage() {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
       setStream(mediaStream);
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
     } catch (err) {
       console.warn("Camera access denied or unavailable, using simulated viewport.", err);
     }
@@ -109,6 +106,13 @@ export default function ScanPage() {
       setStep("ERROR");
     }
   };
+
+  // Bind stream to video element when it mounts and stream is loaded
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream, step]);
 
   useEffect(() => {
     return () => stopCamera();

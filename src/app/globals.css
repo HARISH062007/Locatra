@@ -66,20 +66,19 @@
   --spacing-stack-lg:          48px;
 }
 
-/* ── Base reset ── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background-color: var(--color-background);
   color: var(--color-on-surface);
   font-family: var(--font-sans);
@@ -201,3 +200,10 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--color-accent-purple);
   border-radius: var(--radius-full);
 }
+
+/* Centering override to resolve physical/logical margin conflicts */
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
