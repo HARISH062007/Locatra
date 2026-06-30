@@ -16,7 +16,7 @@ const NAV = [
 export function Sidebar() {
   const path = usePathname();
   return (
-    <aside className="glass fixed left-0 top-0 z-40 hidden h-full w-64 flex-col border-r border-[var(--color-border-glass)] p-4 lg:flex">
+    <aside className="relative z-10 w-64 m-4 md:m-6 p-4 hidden lg:flex flex-col gap-2 backdrop-blur-3xl bg-[#1c1c1e]/40 border border-white/5 rounded-3xl shadow-2xl">
       {/* Logo */}
       <Link href="/" className="mb-8 flex items-center gap-3 px-2">
         <svg width="32" height="32" viewBox="0 0 100 100" fill="none" aria-hidden>
@@ -29,11 +29,11 @@ export function Sidebar() {
             </linearGradient>
           </defs>
         </svg>
-        <span className="font-heading text-lg font-bold text-[var(--color-on-surface)]">Locatra</span>
+        <span className="font-heading text-lg font-bold text-white tracking-tight">Locatra</span>
       </Link>
 
       {/* Nav */}
-      <nav className="flex flex-1 flex-col gap-1">
+      <nav className="flex flex-1 flex-col gap-2">
         {NAV.map((item) => {
           const active = path === item.href || (item.href !== "/dashboard" && path.startsWith(item.href));
           return (
@@ -41,13 +41,13 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 active
-                  ? "bg-gradient-to-r from-[var(--color-accent-purple)]/20 to-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] border border-[var(--color-accent-cyan)]/20"
-                  : "text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container)] hover:text-[var(--color-on-surface)]",
+                  ? "bg-white/10 text-white rounded-xl border border-white/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+                  : "text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all"
               )}
             >
-              <span className={active ? "text-[var(--color-accent-cyan)]" : ""}>{item.icon}</span>
+              <span className={active ? "text-cyan-400" : ""}>{item.icon}</span>
               {item.label}
             </Link>
           );
@@ -55,12 +55,12 @@ export function Sidebar() {
       </nav>
 
       {/* Upgrade chip */}
-      <div className="rounded-xl border border-[var(--color-accent-purple)]/30 bg-[var(--color-accent-purple)]/10 p-4">
-        <p className="text-xs font-semibold text-[var(--color-accent-purple)]">Free Plan</p>
-        <p className="mt-1 text-xs text-[var(--color-on-surface-variant)]">3 / 3 scans used this month</p>
+      <div className="mt-auto rounded-xl border border-white/5 bg-white/5 p-4">
+        <p className="text-xs font-semibold text-purple-400">Free Plan</p>
+        <p className="mt-1 text-xs text-slate-400">3 / 3 scans used this month</p>
         <Link
           href="/dashboard/upgrade"
-          className="mt-3 block w-full rounded-full bg-gradient-to-r from-[var(--color-accent-purple)] to-[var(--color-accent-cyan)] py-2 text-center text-xs font-semibold text-white transition-opacity hover:opacity-90"
+          className="mt-3 block w-full rounded-xl bg-gradient-to-r from-purple-500/80 to-cyan-500/80 hover:from-purple-500 hover:to-cyan-500 py-2 text-center text-xs font-semibold text-white transition-opacity shadow-[0_0_15px_rgba(6,182,212,0.2)]"
         >
           Upgrade to Pro
         </Link>

@@ -1,18 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Sora } from "next/font/google";
+
 import "./globals.css";
+import { SpatialProvider } from "@/contexts/SpatialContext";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
 
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Locatra | Your Space. Understood by AI.",
@@ -32,9 +24,37 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} ${sora.variable} font-sans antialiased`}>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`font-sans antialiased`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                let theme = localStorage.getItem('theme');
+                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+        <SpatialProvider>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </SpatialProvider>
+        
+        {/* SVG Filter for Optical Crystal Glass Refraction */}
+        <svg style={{ display: "none" }}>
+          <defs>
+            <filter id="glass-refraction">
+              <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+        </svg>
       </body>
     </html>
   );
